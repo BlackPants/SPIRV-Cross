@@ -2012,6 +2012,12 @@ void CompilerHLSL::emit_struct_member(const SPIRType &type, uint32_t member_type
 
 void CompilerHLSL::emit_buffer_block(const SPIRVariable &var)
 {
+	if (flattened_buffer_blocks.count(var.self))
+	{
+		emit_buffer_block_flattened(var);
+		return;
+	}
+
 	auto &type = get<SPIRType>(var.basetype);
 
 	bool is_uav = var.storage == StorageClassStorageBuffer || has_decoration(type.self, DecorationBufferBlock);
